@@ -2,11 +2,13 @@
 
 namespace ApiHelper\Http\Resources\Json;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use ApiHelper\IncludeRegistery;
 use ApiHelper\Http\Concerns\InteractsWithRequest;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class RelationshipResource extends \Illuminate\Http\Resources\Json\Resource
+class RelationshipResource extends JsonResource
 {
     use InteractsWithRequest;
 
@@ -16,16 +18,16 @@ class RelationshipResource extends \Illuminate\Http\Resources\Json\Resource
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
     public function toArray($request)
     {
         return $this->getIncludes($request)->mapWithKeys(function ($include) use ($request) {
-            return $this->callRealtion($include, $request);
+            return $this->callRelation($include, $request);
         });
     }
 
-    protected function callRealtion($include, $request)
+    protected function callRelation($include, $request)
     {
         list($pass, $call) = $this->canCall($include);
         if ($pass) {
@@ -39,13 +41,13 @@ class RelationshipResource extends \Illuminate\Http\Resources\Json\Resource
             list($pass, $call) = $this->canCall($relationship);
             return $pass;
         })->mapWithKeys(function ($relationship) use ($request) {
-            return $this->callRealtion($relationship, $request);
+            return $this->callRelation($relationship, $request);
         });
     }
 
     public function canCall($relationship)
     {
-        $call = array_get($this->casts, $relationship, $relationship);
+        $call = Arr::get($this->casts, $relationship, $relationship);
         return [$this->resource->relationLoaded($relationship) && method_exists($this, $call), $call];
     }
 

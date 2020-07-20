@@ -3,9 +3,9 @@
 namespace ApiHelper\Http\Resources;
 
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class Error extends Resource
+class Error extends JsonResource
 {
     /**
      * Create a new resource instance.
@@ -15,6 +15,7 @@ class Error extends Resource
      */
     public function __construct($resource)
     {
+        JsonResource::__construct($resource);
         $this->resource = $resource;
 
         static::withoutWrapping();

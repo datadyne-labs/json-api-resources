@@ -4,8 +4,9 @@ namespace ApiHelper\Http\Resources\Json;
 
 use Illuminate\Http\Resources\MissingValue;
 use ApiHelper\IncludeRegistery;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class Resource extends \Illuminate\Http\Resources\Json\Resource
+class Resource extends JsonResource
 {
     /**
      * Removes the relation data when enabled.
@@ -19,7 +20,7 @@ class Resource extends \Illuminate\Http\Resources\Json\Resource
      *
      * @param  RelationshipResource $relation
      * @param  \Illuminate\Http\Request  $request
-     * @return Array | \Illuminate\Http\Resources\MissingValue
+     * @return array | \Illuminate\Http\Resources\MissingValue
      */
     protected function loadRelation(RelationshipResource $relation, $request)
     {
